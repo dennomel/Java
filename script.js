@@ -51,10 +51,10 @@ const library = [
 ];
 
 /*Log the title of the second book in the library array*/
-console.log(library.title);
+console.log(library[1].title);
 
 /*Log the author of the third book in the library array*/
-console.log(library["2"].author);
+console.log(library[2].author);
 
 console.log(colors[4]);
 
