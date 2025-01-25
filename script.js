@@ -1,65 +1,88 @@
-/* objects*/
-const book = {
-  title: "The Great Adventure",
-  author: {
-    name: "John Doe",
-    age: 45,
-  },
-  pages: 350,
-  isPublished: true,
-};
-console.log(book.title);
+// Wait for the DOM to load
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("akan-form");
+  const resultDiv = document.getElementById("result");
 
-/*Access and Log the title and author of the book object*/
-console.log(book.author);
-console.log(book.title);
+  // Arrays for Akan names
+  const maleNames = [
+    "Kwasi",
+    "Kwadwo",
+    "Kwabena",
+    "Kwaku",
+    "Yaw",
+    "Kofi",
+    "Kwame",
+  ];
+  const femaleNames = [
+    "Akosua",
+    "Adwoa",
+    "Abenaa",
+    "Akua",
+    "Yaa",
+    "Afua",
+    "Ama",
+  ];
 
-/*Access and log the name of the author*/
-console.log(book.author.name);
+  // Function to calculate the day of the week
+  const calculateDayOfWeek = (date) => {
+    const century = Math.floor(date.getFullYear() / 100);
+    const year = date.getFullYear() % 100;
+    const month = date.getMonth() + 1; // JavaScript months are 0-indexed
+    const day = date.getDate();
 
-/*Arrays*/
-const colors = ["Blue", "Green", "Yellow", "Red", "Purple"];
+    // Zeller's Congruence Formula
+    const dayOfWeek = Math.floor(
+      (century / 4 -
+        2 * century -
+        1 +
+        (5 * year) / 4 +
+        (26 * (month + 1)) / 10 +
+        day) %
+        7
+    );
 
-/*Log the entire array to the console*/
-console.log(colors);
+    // Return a positive index
+    return (dayOfWeek + 7) % 7;
+  };
 
-/*Access and log the first, third, and last colors from the colors array*/
-console.log(colors[0]);
-console.log(colors[2]);
-console.log(colors[4]);
+  // Form submission handler
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
 
-/*create an array called library*/
-const library = [
-  {
-    title: "Journey to the Unknown",
-    author: { name: "Alice Smith", age: 38 },
-    pages: 200,
-    isPublished: false,
-  },
-  {
-    title: "Secrets of the Cosmos",
-    author: { name: "Brian Wilson", age: 50 },
-    pages: 450,
-    isPublished: true,
-  },
-  {
-    title: "Mysteries of the Mind",
-    author: { name: "Catherine Lee", age: 42 },
-    pages: 320,
-    isPublished: true,
-  },
-];
+    // Get user input
+    const birthdayInput = document.getElementById("birthday").value;
+    const genderInput = document.getElementById("gender").value;
 
-/*Log the title of the second book in the library array*/
-console.log(library[1].title);
+    // Input validation
+    if (!birthdayInput || !genderInput) {
+      resultDiv.textContent =
+        "Please enter a valid birthday and select your gender.";
+      resultDiv.style.color = "red";
+      return;
+    }
 
-/*Log the author of the third book in the library array*/
-console.log(library[2].author);
+    const birthday = new Date(birthdayInput);
 
-console.log(colors[4]);
+    // Check for invalid dates
+    if (isNaN(birthday.getTime())) {
+      resultDiv.textContent = "Invalid date. Please try again.";
+      resultDiv.style.color = "red";
+      return;
+    }
 
-function sayHello() {
-  console.log("Hello");
-}
+    // Calculate the day of the week
+    const dayOfWeek = calculateDayOfWeek(birthday);
 
-console.log(sayHello);
+    // Determine the Akan name
+    let akanName;
+    if (genderInput === "male") {
+      akanName = maleNames[dayOfWeek];
+    } else if (genderInput === "female") {
+      akanName = femaleNames[dayOfWeek];
+    }
+
+    // Display the result
+    resultDiv.textContent = `Your Akan name is ${akanName}!`;
+    resultDiv.style.color = "#fff";
+  });
+});
